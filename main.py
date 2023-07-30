@@ -1,13 +1,21 @@
+#importing the neccessary libraries
 import streamlit as st
 import openai
 import os
-from PIL import Image
-st.set_page_config(page_title="Personal Mental Health Guide")
-st.title('Your Personal AI Psychiatrist')
+from PIL import Image  #used for image display
 
-image = Image.open('doctor.png')
+
+#Initial Config for the front display in streamlit
+st.set_page_config(page_title="Personal Mental Health Guide")
+st.title('Your Personal AI Psychiatrist')  #setting the title of the chatbot
+
+image = Image.open('doctor.png')  #displaying the image, using PIL libraary
 
 st.image(image)
+
+
+
+#A Caption to tell the user about the chatbot and give them a sense of what this can do
 st.caption(
     """Mindful Companion is a revolutionary app designed to provide compassionate support and guidance for your mental well-being. As your virtual empathetic psychiatrist, it offers a caring hand to navigate through feelings of depression, anxiety, and other emotional challenges.
 
@@ -15,8 +23,14 @@ With a focus on medical accuracy and understanding, Mindful Companion uses advan
 
 Experience the power of an empathetic companion in your pocket. Just tell me about your problems and I'll happy to look into it and guide you my friend."""
 )
-openai_api_key = st.sidebar.text_input("OpenAI-api_key", type="password") #"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"
+
+#Setting up the input variable for openai api key
+openai_api_key = st.sidebar.text_input("OpenAI-api_key", type="password")  #the password type means that it will hide the text entered just like a secret
 openai.api_key = openai_api_key
+
+
+#Making the prompt, the most crucial and important part of the chatbot
+#This makes the chatbot properly answer the user's request
 
 Prompt = """Welcome to your empathetic AI psychiatrist, a caring companion on your journey to mental well-being. I'm here to address feelings of depression and anxiety with a deep focus on the actual medical causes, providing you with accurate information and understanding. Remember, you're not alone, and together, we'll navigate the challenges you face.
 
@@ -32,6 +46,10 @@ Remember, you're valued and cherished, and I'm here for you every step of the wa
 
 With the elements you emphasized, the prompt now captures the AI psychiatrist's role in addressing depression and anxiety, providing motivational support, displaying empathy, offering a warm greeting, and encouraging users to seek professional consultation when needed. If there are any further adjustments or additional details you'd like to include, please let me know, and we'll make further refinements as necessary.
 """
+
+
+
+#A Custom function to enter the prompt and user's issue into the OpenAI ChatCompletion Endpoint
 def create_response(Input):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -39,16 +57,20 @@ def create_response(Input):
             {"role": "system", "content": (Prompt)},
             {"role": "user", "content": ("The user wants a suggestion about " + Input)}
         ],
-        temperature=0.5,
+        temperature=0.5,  #the temperature here means the randomness of the system in each run
     )
 
-    return st.info(response['choices'][0]['message']['content'])
+    return st.info(response['choices'][0]['message']['content']) # properly displaying the output from ChatGPT
 
 
-with st.form('theform'):
+
+#Extra measure to make sure, the openai api key is entered before querying over the chatbot
+with st.form('theform'):  
     topic_text = st.text_input('Please Tell me about your issue:', '')
     submitted = st.form_submit_button('Talk To Me')
     if not openai_api_key.startswith('sk-'):
-        st.warning('Please enter your OpenAI api key!', icon='⚠')
-    if submitted and openai_api_key.startswith('sk-'):
+        st.warning('Please enter your OpenAI api key!', icon='⚠') 
+    if submitted and openai_api_key.startswith('sk-'): #this will check that correct openapi key is entered
         create_response(topic_text)
+
+#END
