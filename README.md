@@ -1,6 +1,6 @@
 # AI Empathetic Psychiatrist
 
-![AI Psychiatrist](doctor.png) 
+![AI](https://github.com/kaushal07wick/MERCOR-Health-App/blob/master/doctor.png?raw=true)
 Welcome to the AI Empathetic Psychiatrist! This project is designed to create a virtual psychiatrist that offers compassionate support and guidance for individuals facing mental health challenges. The AI system acts as a caring companion, providing motivational statements, empathetic understanding, and scientifically-sound advice to promote mental well-being.
 
 ## Table of Contents
